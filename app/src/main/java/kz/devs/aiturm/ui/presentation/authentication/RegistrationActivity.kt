@@ -22,7 +22,7 @@ class RegistrationActivity : AppCompatActivity() {
         signIn = findViewById(R.id.signIn)
 
         signIn?.setOnClickListener {
-            startActivity(LoginActivity.newInstance(this))
+            onBackPressed()
         }
     }
 }

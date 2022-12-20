@@ -4,11 +4,21 @@
     <string name="mobile_number">Mobile number</string>
     <string name="continu">Continue</string>
     <string name="dont_have_an_account">Don’t have an account? Sign up!</string>
-    <string name="sign_up_get_your_roommate"><![CDATA[Sign up & get your Roommates]]></string>
     <string name="sign_up">Sign up</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="or">OR</string>
     <string name="facebook_google">Facebook | Google+</string>
     <string name="already_have_an_account">Already have an account? Log in</string>
+    <string name="q1">Q. What do you want us to call you?</string>
+    <string name="q2">Q. What suits you best?</string>
+    <string name="q3">Q. Choose your speciality</string>
+    <string name="software_engineering">Software engineering</string>
+    <string name="computer_science">Computer Science</string>
+    <string name="big_data_analysis">Big Data Analysis</string>
+    <string name="industrial_internet_things">Industrial Internet of Things</string>
+    <string name="media_technologies">Media Technologies</string>
+    <string name="q4">Q. What is your gender?</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 </resources>
