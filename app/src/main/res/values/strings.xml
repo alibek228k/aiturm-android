@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">AITUrm</string>
+    <string name="welcome_back">Welcome back to Roommates</string>
+    <string name="mobile_number">Mobile number</string>
+    <string name="continu">Continue</string>
+    <string name="dont_have_an_account">Don’t have an account? Sign up!</string>
+    <string name="sign_up_get_your_roommate"><![CDATA[Sign up & get your Roommates]]></string>
+    <string name="sign_up">Sign up</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="or">OR</string>
+    <string name="facebook_google">Facebook | Google+</string>
+    <string name="already_have_an_account">Already have an account? Log in</string>
 </resources>
