@@ -12,6 +12,7 @@ class HomeActivity : AppCompatActivity() {
     private var toolbar: MaterialToolbar? = null
     private var toolbarTitle: MaterialToolbar? = null
 
+
     companion object{
         fun newInstance(context: Context): Intent{
             return Intent(context, HomeActivity::class.java)
