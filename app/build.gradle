@@ -1,16 +1,17 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
     namespace 'kz.devs.aiturm'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "kz.devs.aiturm"
-        minSdk 21
-        targetSdk 32
+        minSdk 23
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -32,24 +33,32 @@ android {
     }
 }
 
-ext{
+ext {
     retrofit_version = '2.9.0'
     okhttp_version = '5.0.0-alpha.2'
+    firebase_bom_version = '31.2.3'
+    google_service_version = "4.3.15"
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     // Retrofit implementation
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:okhttp-tls:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Import the BoM for the Firebase platform
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation "com.google.gms:google-services:$google_service_version"
+    implementation "com.google.firebase:firebase-analytics-ktx"
 }

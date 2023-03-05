@@ -21,4 +21,6 @@
     <string name="q4">Q. What is your gender?</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="password">Password</string>
+    <string name="sing_in">Sing in</string>
 </resources>

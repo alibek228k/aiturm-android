@@ -4,13 +4,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kz.devs.aiturm.R
+import kz.devs.aiturm.ui.presentation.authentication.login.LoginActivity
 
 class HomeActivity : AppCompatActivity() {
-
-    private var toolbar: MaterialToolbar? = null
-    private var toolbarTitle: MaterialToolbar? = null
 
     companion object{
         fun newInstance(context: Context): Intent{
@@ -18,12 +21,19 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private var signOutButton: MaterialButton? = null
+
+    private var auth: FirebaseAuth = Firebase.auth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        toolbar = findViewById(R.id.toolbar)
-        toolbar?.setBackgroundColor(resources.getColor(R.color.purple_700))
+        signOutButton = findViewById(R.id.signOutButton)
 
-        setSupportActionBar(toolbar)
+        signOutButton?.setOnClickListener{
+            auth.signOut()
+            Toast.makeText(this, "Successfully signed out!", Toast.LENGTH_SHORT).show()
+            startActivity(LoginActivity.newInstance(this))
+        }
     }
 }

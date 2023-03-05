@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.presentation.authentication.LoginActivity"
+    tools:context=".ui.presentation.authentication.login.LoginActivity"
     android:background="@color/white">
 
 
@@ -85,11 +85,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/mobileNumberInputLayout"
+            android:id="@+id/passwordInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/mobile_number"
+            android:hint="@string/password"
             android:paddingHorizontal="30dp"
             android:paddingVertical="10dp"
             app:boxCornerRadiusBottomEnd="10dp"

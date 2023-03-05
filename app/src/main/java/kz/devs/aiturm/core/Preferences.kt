@@ -10,7 +10,6 @@ object Preferences {
         return try {
             context.getSharedPreferences(name, Context.MODE_PRIVATE)
         }catch (e: RuntimeException){
-            println("Preferences() -> ${e.message}")
             null
         }
     }
