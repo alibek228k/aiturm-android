@@ -15,6 +15,10 @@ import kz.devs.aiturm.ui.presentation.authentication.login.LoginActivity
 
 class HomeActivity : AppCompatActivity() {
 
+    private var toolbar: MaterialToolbar? = null
+    private var toolbarTitle: MaterialToolbar? = null
+
+
     companion object{
         fun newInstance(context: Context): Intent{
             return Intent(context, HomeActivity::class.java)
