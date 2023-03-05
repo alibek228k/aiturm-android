@@ -23,4 +23,8 @@
     <string name="female">Female</string>
     <string name="password">Password</string>
     <string name="sing_in">Sing in</string>
+    <string name="successfully_singed_up">User successfully signed up!</string>
+    <string name="failed_to_sing_up">Signed up failed, try again!</string>
+    <string name="format_error">Wrong format!</string>
+    <string name="empty_field">Field can not be empty!</string>
 </resources>

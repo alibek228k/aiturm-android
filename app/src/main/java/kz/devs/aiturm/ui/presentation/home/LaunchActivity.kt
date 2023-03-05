@@ -23,8 +23,4 @@ class LaunchActivity : AppCompatActivity() {
             startActivity(LoginActivity.newInstance(this))
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-    }
 }

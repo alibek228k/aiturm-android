@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -17,6 +18,7 @@ class HomeActivity : AppCompatActivity() {
 
     private var toolbar: MaterialToolbar? = null
     private var toolbarTitle: MaterialToolbar? = null
+    private var materialTextView: MaterialTextView? = null
 
 
     companion object{
@@ -27,15 +29,15 @@ class HomeActivity : AppCompatActivity() {
 
     private var signOutButton: MaterialButton? = null
 
-    private var auth: FirebaseAuth = Firebase.auth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         signOutButton = findViewById(R.id.signOutButton)
+        materialTextView = findViewById(R.id.materialTextView)
+        materialTextView?.text = if (Firebase.auth.currentUser?.displayName?.isBlank() == true) Firebase.auth.currentUser?.email else Firebase.auth.currentUser?.displayName
 
         signOutButton?.setOnClickListener{
-            auth.signOut()
+            Firebase.auth.signOut()
             Toast.makeText(this, "Successfully signed out!", Toast.LENGTH_SHORT).show()
             startActivity(LoginActivity.newInstance(this))
         }

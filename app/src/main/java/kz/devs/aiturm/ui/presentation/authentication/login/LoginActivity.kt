@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
@@ -13,8 +14,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kz.devs.aiturm.R
 import kz.devs.aiturm.ui.presentation.authentication.registration.step1.RegistrationActivity
-import kz.devs.aiturm.ui.presentation.authentication.registration.step2.ProfileFillOutActivity
 import kz.devs.aiturm.ui.presentation.home.HomeActivity
+import kz.devs.aiturm.ui.validation.EditTextValidator
 
 class LoginActivity : AppCompatActivity() {
 
@@ -25,8 +26,8 @@ class LoginActivity : AppCompatActivity() {
 
     private var auth: FirebaseAuth? = null
 
-    companion object{
-        fun newInstance(context: Context): Intent{
+    companion object {
+        fun newInstance(context: Context): Intent {
             return Intent(context, LoginActivity::class.java)
         }
     }
@@ -39,27 +40,70 @@ class LoginActivity : AppCompatActivity() {
         emailInputLayout = findViewById(R.id.emailInputLayout)
         passwordInputLayout = findViewById(R.id.passwordInputLayout)
 
+        setupEmailValidator()
+        setupPasswordValidator()
+        setupLoginButton()
+
         auth = Firebase.auth
 
-        signIn?.setOnClickListener{
+        signIn?.setOnClickListener {
             startActivity(RegistrationActivity.newIntent(this))
         }
 
         loginButton?.setOnClickListener {
 //            startActivity(HomeActivity.newInstance(this))
-            auth?.let{
+            auth?.let {
                 it.signInWithEmailAndPassword(
                     emailInputLayout?.editText?.text?.toString()!!,
                     passwordInputLayout?.editText?.text?.toString()!!
-                ).addOnCompleteListener{ result ->
-                    if (result.isSuccessful){
+                ).addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
                         Toast.makeText(this, "Successfully signed in!", Toast.LENGTH_SHORT).show()
                         startActivity(HomeActivity.newInstance(this))
-                    }else{
-                        Toast.makeText(this, "Failed to sign in, try again", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Failed to sign in, try again", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
         }
+    }
+
+    private fun setupEmailValidator() {
+        emailInputLayout?.editText?.addTextChangedListener(object : EditTextValidator(
+            emailInputLayout?.editText as TextInputEditText
+        ) {
+            override fun validate(editText: TextInputEditText, text: String) {
+                val email: String = emailInputLayout?.editText?.text.toString().trim()
+                if (email.isBlank()) {
+                    emailInputLayout?.error = getString(R.string.empty_field)
+                } else {
+                    emailInputLayout?.error = null
+                    loginButton?.isEnabled =
+                        emailInputLayout?.error == null && passwordInputLayout?.error == null
+                }
+            }
+        })
+    }
+
+    private fun setupPasswordValidator() {
+        passwordInputLayout?.editText?.addTextChangedListener(object : EditTextValidator(
+            passwordInputLayout?.editText as TextInputEditText
+        ) {
+            override fun validate(editText: TextInputEditText, text: String) {
+                val password: String = passwordInputLayout?.editText?.text.toString().trim()
+                if (password.isBlank()) {
+                    passwordInputLayout?.error = getString(R.string.empty_field)
+                } else {
+                    passwordInputLayout?.error = null
+                    loginButton?.isEnabled =
+                        emailInputLayout?.error == null && passwordInputLayout?.error == null
+                }
+            }
+        })
+    }
+
+    private fun setupLoginButton() {
+        loginButton?.isEnabled = false
     }
 }
