@@ -83,6 +83,10 @@ class RegistrationActivity : AppCompatActivity() {
                     signUpButton?.isEnabled = emailInputLayout?.error == null && passwordInputLayout?.error == null
                 }
             }
+
+            override fun validatedText(text: String) {
+
+            }
         })
     }
 
@@ -106,6 +110,10 @@ class RegistrationActivity : AppCompatActivity() {
 
                     signUpButton?.isEnabled = emailInputLayout?.error == null && passwordInputLayout?.error == null
                 }
+            }
+
+            override fun validatedText(text: String) {
+
             }
         })
     }

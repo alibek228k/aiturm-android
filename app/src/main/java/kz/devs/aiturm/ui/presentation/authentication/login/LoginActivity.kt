@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -26,6 +27,8 @@ class LoginActivity : AppCompatActivity() {
     private var emailInputLayout: TextInputLayout? = null
     private var passwordInputLayout: TextInputLayout? = null
 
+    private val viewModel: LoginViewModel by viewModels()
+
     private var auth: FirebaseAuth? = null
 
     companion object {
@@ -46,6 +49,10 @@ class LoginActivity : AppCompatActivity() {
         setupPasswordValidator()
         setupLoginButton()
 
+        observePasswordErrorMessage()
+        observeEmailErrorMessage()
+        observeLoginButtonAvailability()
+
         auth = Firebase.auth
 
         signIn?.setOnClickListener {
@@ -53,7 +60,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginButton?.setOnClickListener {
-//            startActivity(HomeActivity.newInstance(this))
             auth?.let {
                 it.signInWithEmailAndPassword(
                     emailInputLayout?.editText?.text?.toString()!!,
@@ -76,22 +82,11 @@ class LoginActivity : AppCompatActivity() {
             emailInputLayout?.editText as TextInputEditText
         ) {
             override fun validate(editText: TextInputEditText, text: String) {
-                val regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"
-                val email: String = emailInputLayout?.editText?.text.toString().trim()
-                if (email.isBlank()) {
-                    emailInputLayout?.error = getString(R.string.empty_field)
-                    loginButton?.isEnabled = false
-                } else if (!email.matches(regex.toRegex())) {
-                    emailInputLayout?.error = getString(R.string.format_error)
-                } else {
-                    emailInputLayout?.error = null
-                    if (emailInputLayout?.editText?.text.isNullOrBlank() || passwordInputLayout?.editText?.text.isNullOrBlank()) {
-                        loginButton?.isEnabled = false
-                    } else {
-                        loginButton?.isEnabled =
-                            emailInputLayout?.error == null && passwordInputLayout?.error == null
-                    }
-                }
+
+            }
+
+            override fun validatedText(text: String) {
+                viewModel.onEmailTextChanged(text)
             }
         })
     }
@@ -101,25 +96,34 @@ class LoginActivity : AppCompatActivity() {
             passwordInputLayout?.editText as TextInputEditText
         ) {
             override fun validate(editText: TextInputEditText, text: String) {
-                val password: String = passwordInputLayout?.editText?.text.toString().trim()
-                if (password.isBlank()) {
-                    passwordInputLayout?.error = getString(R.string.empty_field)
-                    loginButton?.isEnabled = false
-                } else {
-                    passwordInputLayout?.error = null
 
-                    if (emailInputLayout?.editText?.text.isNullOrBlank() || passwordInputLayout?.editText?.text.isNullOrBlank()) {
-                        loginButton?.isEnabled = false
-                    } else {
-                        loginButton?.isEnabled =
-                            emailInputLayout?.error == null && passwordInputLayout?.error == null
-                    }
-                }
+            }
+
+            override fun validatedText(text: String) {
+                viewModel.onPasswordTextChanged(text)
             }
         })
     }
 
     private fun setupLoginButton() {
         loginButton?.isEnabled = false
+    }
+
+    private fun observeEmailErrorMessage(){
+        viewModel.getEmailError().observe(this){ validator ->
+            emailInputLayout?.error = validator.errorMessage
+        }
+    }
+
+    private fun observePasswordErrorMessage(){
+        viewModel.getPasswordError().observe(this){ validator ->
+            passwordInputLayout?.error = validator.errorMessage
+        }
+    }
+
+    private fun observeLoginButtonAvailability(){
+        viewModel.getLoginButtonAvailability().observe(this){
+            loginButton?.isEnabled = it
+        }
     }
 }
