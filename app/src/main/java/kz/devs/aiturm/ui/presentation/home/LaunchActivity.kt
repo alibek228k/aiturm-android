@@ -2,7 +2,6 @@ package kz.devs.aiturm.ui.presentation.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -19,8 +18,10 @@ class LaunchActivity : AppCompatActivity() {
             super.onCreate(savedInstanceState)
         if (auth.currentUser != null){
             startActivity(HomeActivity.newInstance(this))
+            finish()
         }else {
             startActivity(LoginActivity.newInstance(this))
+            finish()
         }
     }
 }

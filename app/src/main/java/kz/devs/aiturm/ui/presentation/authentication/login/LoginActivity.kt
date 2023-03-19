@@ -12,11 +12,13 @@ import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kz.devs.aiturm.R
 import kz.devs.aiturm.ui.presentation.authentication.registration.step1.RegistrationActivity
 import kz.devs.aiturm.ui.presentation.home.HomeActivity
 import kz.devs.aiturm.ui.validation.EditTextValidator
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private var signIn: MaterialTextView? = null
@@ -74,13 +76,21 @@ class LoginActivity : AppCompatActivity() {
             emailInputLayout?.editText as TextInputEditText
         ) {
             override fun validate(editText: TextInputEditText, text: String) {
+                val regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"
                 val email: String = emailInputLayout?.editText?.text.toString().trim()
                 if (email.isBlank()) {
                     emailInputLayout?.error = getString(R.string.empty_field)
+                    loginButton?.isEnabled = false
+                } else if (!email.matches(regex.toRegex())) {
+                    emailInputLayout?.error = getString(R.string.format_error)
                 } else {
                     emailInputLayout?.error = null
-                    loginButton?.isEnabled =
-                        emailInputLayout?.error == null && passwordInputLayout?.error == null
+                    if (emailInputLayout?.editText?.text.isNullOrBlank() || passwordInputLayout?.editText?.text.isNullOrBlank()) {
+                        loginButton?.isEnabled = false
+                    } else {
+                        loginButton?.isEnabled =
+                            emailInputLayout?.error == null && passwordInputLayout?.error == null
+                    }
                 }
             }
         })
@@ -94,10 +104,16 @@ class LoginActivity : AppCompatActivity() {
                 val password: String = passwordInputLayout?.editText?.text.toString().trim()
                 if (password.isBlank()) {
                     passwordInputLayout?.error = getString(R.string.empty_field)
+                    loginButton?.isEnabled = false
                 } else {
                     passwordInputLayout?.error = null
-                    loginButton?.isEnabled =
-                        emailInputLayout?.error == null && passwordInputLayout?.error == null
+
+                    if (emailInputLayout?.editText?.text.isNullOrBlank() || passwordInputLayout?.editText?.text.isNullOrBlank()) {
+                        loginButton?.isEnabled = false
+                    } else {
+                        loginButton?.isEnabled =
+                            emailInputLayout?.error == null && passwordInputLayout?.error == null
+                    }
                 }
             }
         })
