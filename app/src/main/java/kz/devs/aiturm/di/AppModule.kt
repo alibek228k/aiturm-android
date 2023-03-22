@@ -1,12 +1,13 @@
 package kz.devs.aiturm.di
 
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kz.devs.aiturm.data.remote.repository.UsersRepositoryImpl
+import kz.devs.aiturm.data.remote.repository.AuthRepositoryImpl
 import kz.devs.aiturm.data.remote.service.ApiService
-import kz.devs.aiturm.domain.repository.UsersRepository
+import kz.devs.aiturm.domain.repository.AuthRepository
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -16,16 +17,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApiService(): ApiService {
-        return Retrofit.Builder()
-            .baseUrl("baseUrl")
-            .build()
-            .create(ApiService::class.java)
-    }
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
     @Singleton
-    fun provideUsersRepository(apiService: ApiService): UsersRepository {
-        return UsersRepositoryImpl(apiService)
+    fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
+        return AuthRepositoryImpl(firebaseAuth)
     }
 }

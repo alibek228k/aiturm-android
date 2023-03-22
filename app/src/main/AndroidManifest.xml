@@ -23,7 +23,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.presentation.authentication.registration.step1.RegistrationActivity"
+            android:name=".ui.presentation.authentication.registration.RegistrationFragment"
             android:exported="false"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <meta-data
@@ -38,7 +38,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.presentation.authentication.login.LoginActivity"
+            android:name=".ui.presentation.authentication.AuthActivity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <meta-data

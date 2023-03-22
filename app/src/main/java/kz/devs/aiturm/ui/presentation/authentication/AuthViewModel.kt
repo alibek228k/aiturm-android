@@ -1,4 +1,4 @@
-package kz.devs.aiturm.ui.presentation.authentication.login
+package kz.devs.aiturm.ui.presentation.authentication
 
 import android.app.Application
 import android.util.Patterns
@@ -11,14 +11,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kz.devs.aiturm.R
+import kz.devs.aiturm.domain.repository.AuthRepository
 import kz.devs.aiturm.ui.validation.model.EmailValidation
 import kz.devs.aiturm.ui.validation.model.PasswordValidator
 import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val application: Application
+class AuthViewModel @Inject constructor(
+    private val application: Application,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val emailEditTextValidator by lazy { MutableLiveData<EmailValidation>() }
@@ -29,6 +31,9 @@ class LoginViewModel @Inject constructor(
 
     private val loginButtonAvailability by lazy { MutableLiveData<Boolean>() }
     fun getLoginButtonAvailability(): LiveData<Boolean> = loginButtonAvailability
+
+    private val successfullyLoggedIn by lazy { MutableLiveData<Boolean>() }
+    fun getLoginResult(): LiveData<Boolean> = successfullyLoggedIn
 
     fun onPasswordTextChanged(changedText: String) {
         if (changedText.trim().isBlank()) {
@@ -91,10 +96,14 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun onSignInButtonClicked(){
-
+    fun onSignInButtonClicked(email: String, password: String){
+        viewModelScope.launch {
+            withContext(Dispatchers.Main){
+                authRepository.login(email, password).addOnCompleteListener { isCompleted ->
+                    successfullyLoggedIn.value = isCompleted.isSuccessful
+                }
+            }
+        }
     }
-
-
 
 }

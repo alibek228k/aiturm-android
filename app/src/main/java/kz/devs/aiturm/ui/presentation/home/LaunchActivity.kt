@@ -7,7 +7,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kz.devs.aiturm.R
 import kz.devs.aiturm.core.Preferences
-import kz.devs.aiturm.ui.presentation.authentication.login.LoginActivity
+import kz.devs.aiturm.ui.presentation.authentication.AuthActivity
 
 class LaunchActivity : AppCompatActivity() {
 
@@ -20,7 +20,7 @@ class LaunchActivity : AppCompatActivity() {
             startActivity(HomeActivity.newInstance(this))
             finish()
         }else {
-            startActivity(LoginActivity.newInstance(this))
+            startActivity(AuthActivity.newInstance(this))
             finish()
         }
     }

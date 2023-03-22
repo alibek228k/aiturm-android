@@ -8,11 +8,10 @@ import android.widget.Toast
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kz.devs.aiturm.R
-import kz.devs.aiturm.ui.presentation.authentication.login.LoginActivity
+import kz.devs.aiturm.ui.presentation.authentication.AuthActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -39,7 +38,7 @@ class HomeActivity : AppCompatActivity() {
         signOutButton?.setOnClickListener{
             Firebase.auth.signOut()
             Toast.makeText(this, "Successfully signed out!", Toast.LENGTH_SHORT).show()
-            startActivity(LoginActivity.newInstance(this))
+            startActivity(AuthActivity.newInstance(this))
         }
     }
 }

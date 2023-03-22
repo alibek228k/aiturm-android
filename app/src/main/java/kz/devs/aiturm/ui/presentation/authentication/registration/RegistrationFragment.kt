@@ -1,10 +1,12 @@
-package kz.devs.aiturm.ui.presentation.authentication.registration.step1
+package kz.devs.aiturm.ui.presentation.authentication.registration
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -15,7 +17,7 @@ import com.google.firebase.ktx.Firebase
 import kz.devs.aiturm.R
 import kz.devs.aiturm.ui.validation.EditTextValidator
 
-class RegistrationActivity : AppCompatActivity() {
+class RegistrationFragment : Fragment(R.layout.fragment_registration) {
 
     private var signIn: MaterialTextView? = null
     private var signUpButton: MaterialButton? = null
@@ -25,17 +27,16 @@ class RegistrationActivity : AppCompatActivity() {
     private var auth: FirebaseAuth? = null
 
     companion object {
-        fun newIntent(context: Context) = Intent(context, RegistrationActivity::class.java)
+        fun newIntent(context: Context) = Intent(context, RegistrationFragment::class.java)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registration)
-        signIn = findViewById(R.id.signIn)
-        signUpButton = findViewById(R.id.signUpButton)
-        emailInputLayout = findViewById(R.id.emailInputLayout)
-        passwordInputLayout = findViewById(R.id.passwordInputLayout)
+        signIn = view.findViewById(R.id.signIn)
+        signUpButton = view.findViewById(R.id.signUpButton)
+        emailInputLayout = view.findViewById(R.id.emailInputLayout)
+        passwordInputLayout = view.findViewById(R.id.passwordInputLayout)
 
         auth = Firebase.auth
 
@@ -48,13 +49,12 @@ class RegistrationActivity : AppCompatActivity() {
                 it.createUserWithEmailAndPassword(
                     emailInputLayout?.editText?.text?.toString()!!,
                     passwordInputLayout?.editText?.text?.toString()!!
-                ).addOnCompleteListener(this) { result ->
+                ).addOnCompleteListener(requireActivity()) { result ->
                     if (result.isSuccessful) {
-                        Toast.makeText(this, getString(R.string.successfully_singed_up), Toast.LENGTH_SHORT)
+                        Toast.makeText(requireContext(), getString(R.string.successfully_singed_up), Toast.LENGTH_SHORT)
                             .show()
-                        onBackPressed()
                     }else {
-                        Toast.makeText(this, getString(R.string.failed_to_sing_up), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.failed_to_sing_up), Toast.LENGTH_SHORT).show()
                     }
                 }.addOnFailureListener {
                     it.printStackTrace()
@@ -62,9 +62,8 @@ class RegistrationActivity : AppCompatActivity() {
             }
         }
 
-
-        signIn?.setOnClickListener {
-            onBackPressed()
+        signIn?.setOnClickListener{
+            findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
         }
     }
 
