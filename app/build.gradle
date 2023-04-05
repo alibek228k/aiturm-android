@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
 }
@@ -81,6 +82,12 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+    //Firebase Crashlytics
+    implementation platform('com.google.firebase:firebase-bom:31.4.0')
+
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
 
 kapt {
