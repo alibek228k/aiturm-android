@@ -12,7 +12,6 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kz.devs.aiturm.R
 import kz.devs.aiturm.ui.presentation.authentication.AuthViewModel
-import kz.devs.aiturm.ui.presentation.authentication.registration.RegistrationFragment
 import kz.devs.aiturm.ui.presentation.home.HomeActivity
 import kz.devs.aiturm.ui.validation.EditTextValidator
 
@@ -26,7 +25,7 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
     private val viewModel: AuthViewModel by activityViewModels()
 
     companion object{
-        private val TAG = LoginFragment::class.java
+        private val TAG = LoginFragment::class.java.simpleName
 
         fun newInstance(): LoginFragment{
             val loginFragment = LoginFragment()
@@ -42,8 +41,8 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
         emailInputLayout = view.findViewById(R.id.emailInputLayout)
         passwordInputLayout = view.findViewById(R.id.passwordInputLayout)
 
-        setupEmailValidator()
-        setupPasswordValidator()
+        setupEmailTextField()
+        setupPasswordTextField()
         setupLoginButton()
 
         observePasswordErrorMessage()
@@ -56,30 +55,22 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun setupEmailValidator() {
+    private fun setupEmailTextField() {
         emailInputLayout?.editText?.addTextChangedListener(object : EditTextValidator(
             emailInputLayout?.editText as TextInputEditText
         ) {
-            override fun validate(editText: TextInputEditText, text: String) {
-
-            }
-
             override fun validatedText(text: String) {
-                viewModel.onEmailTextChanged(text)
+                viewModel.onLoginEmailTextChanged(text)
             }
         })
     }
 
-    private fun setupPasswordValidator() {
+    private fun setupPasswordTextField() {
         passwordInputLayout?.editText?.addTextChangedListener(object : EditTextValidator(
             passwordInputLayout?.editText as TextInputEditText
         ) {
-            override fun validate(editText: TextInputEditText, text: String) {
-
-            }
-
             override fun validatedText(text: String) {
-                viewModel.onPasswordTextChanged(text)
+                viewModel.onLoginPasswordTextChanged(text)
             }
         })
     }
@@ -97,13 +88,13 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
     }
 
     private fun observeEmailErrorMessage(){
-        viewModel.getEmailError().observe(viewLifecycleOwner){ validator ->
+        viewModel.getLoginEmailError().observe(viewLifecycleOwner){ validator ->
             emailInputLayout?.error = validator.errorMessage
         }
     }
 
     private fun observePasswordErrorMessage(){
-        viewModel.getPasswordError().observe(viewLifecycleOwner){ validator ->
+        viewModel.getLoginPasswordError().observe(viewLifecycleOwner){ validator ->
             passwordInputLayout?.error = validator.errorMessage
         }
     }

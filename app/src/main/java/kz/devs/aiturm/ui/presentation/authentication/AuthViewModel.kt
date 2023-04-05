@@ -23,11 +23,13 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
-    private val emailEditTextValidator by lazy { MutableLiveData<EmailValidation>() }
-    fun getEmailError(): LiveData<EmailValidation> = emailEditTextValidator
 
-    private val passwordEditTextValidator by lazy { MutableLiveData<PasswordValidator>() }
-    fun getPasswordError(): LiveData<PasswordValidator> = passwordEditTextValidator
+    //LoginFragment
+    private val loginEmailEditText by lazy { MutableLiveData<EmailValidation>() }
+    fun getLoginEmailError(): LiveData<EmailValidation> = loginEmailEditText
+
+    private val loginPasswordEditText by lazy { MutableLiveData<PasswordValidator>() }
+    fun getLoginPasswordError(): LiveData<PasswordValidator> = loginPasswordEditText
 
     private val loginButtonAvailability by lazy { MutableLiveData<Boolean>() }
     fun getLoginButtonAvailability(): LiveData<Boolean> = loginButtonAvailability
@@ -35,34 +37,48 @@ class AuthViewModel @Inject constructor(
     private val successfullyLoggedIn by lazy { MutableLiveData<Boolean>() }
     fun getLoginResult(): LiveData<Boolean> = successfullyLoggedIn
 
-    fun onPasswordTextChanged(changedText: String) {
+    //RegistrationFragment
+
+    private val registerEmailEditText by lazy { MutableLiveData<EmailValidation>() }
+    fun getRegistrationEmailError(): LiveData<EmailValidation> = registerEmailEditText
+
+    private val registerPasswordEditText by lazy { MutableLiveData<PasswordValidator>() }
+    fun getRegistrationPasswordError(): LiveData<PasswordValidator> = registerPasswordEditText
+
+    private val registerButtonAvailability by lazy { MutableLiveData<Boolean>() }
+    fun getRegisterButtonAvailability(): LiveData<Boolean> = registerButtonAvailability
+
+    private val successfullyRegistered by lazy { MutableLiveData<Boolean>() }
+    fun getRegistrationResult(): LiveData<Boolean> = successfullyRegistered
+
+    fun onLoginPasswordTextChanged(changedText: String) {
         if (changedText.trim().isBlank()) {
             loginButtonAvailability.value = false
-            passwordEditTextValidator.value = PasswordValidator(
+            loginPasswordEditText.value = PasswordValidator(
                 passwordText = changedText,
                 errorMessage = application.getString(R.string.empty_field)
             )
         } else {
-            passwordEditTextValidator.value = PasswordValidator(
+            loginPasswordEditText.value = PasswordValidator(
                 passwordText = changedText,
                 errorMessage = null
             )
-            if (emailEditTextValidator.value?.emailText.isNullOrBlank() || passwordEditTextValidator.value?.passwordText.isNullOrBlank()) {
+            if (loginEmailEditText.value?.emailText.isNullOrBlank() || loginPasswordEditText.value?.passwordText.isNullOrBlank()) {
                 loginButtonAvailability.value = false
             } else {
                 loginButtonAvailability.value =
-                    emailEditTextValidator.value?.errorMessage == null && passwordEditTextValidator.value?.errorMessage == null
+                    loginEmailEditText.value?.errorMessage == null && loginPasswordEditText.value?.errorMessage == null
             }
         }
     }
 
-    fun onEmailTextChanged(changedText: String) {
+    fun onLoginEmailTextChanged(changedText: String) {
         val pattern: Pattern = Patterns.EMAIL_ADDRESS
         if (changedText.isBlank()) {
             viewModelScope.launch {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     loginButtonAvailability.value = false
-                    emailEditTextValidator.value = EmailValidation(
+                    loginEmailEditText.value = EmailValidation(
                         emailText = changedText,
                         errorMessage = application.getString(R.string.empty_field)
                     )
@@ -72,7 +88,7 @@ class AuthViewModel @Inject constructor(
             viewModelScope.launch {
                 withContext(Dispatchers.Main){
                     loginButtonAvailability.value = false
-                    emailEditTextValidator.value = EmailValidation(
+                    loginEmailEditText.value = EmailValidation(
                         emailText = changedText,
                         errorMessage = application.getString(R.string.format_error)
                     )
@@ -81,26 +97,108 @@ class AuthViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 withContext(Dispatchers.Main){
-                    emailEditTextValidator.value = EmailValidation(
+                    loginEmailEditText.value = EmailValidation(
                         emailText = changedText,
                         errorMessage = null
                     )
-                    if (emailEditTextValidator.value?.emailText.isNullOrBlank() || passwordEditTextValidator.value?.passwordText.isNullOrBlank()) {
+                    if (loginEmailEditText.value?.emailText.isNullOrBlank() || loginPasswordEditText.value?.passwordText.isNullOrBlank()) {
                         loginButtonAvailability.value = false
                     } else {
                         loginButtonAvailability.value =
-                            emailEditTextValidator.value?.errorMessage == null && passwordEditTextValidator.value?.errorMessage == null
+                            loginEmailEditText.value?.errorMessage == null && loginPasswordEditText.value?.errorMessage == null
                     }
                 }
             }
         }
     }
 
-    fun onSignInButtonClicked(email: String, password: String){
+    fun onSignInButtonClicked(email: String, password: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 authRepository.login(email, password).addOnCompleteListener { isCompleted ->
                     successfullyLoggedIn.value = isCompleted.isSuccessful
+                }
+            }
+        }
+    }
+
+    //Registration
+
+    fun onRegistrationPasswordTextChanged(changedText: String) {
+        val pattern: Pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}\$")
+        if (changedText.trim().isBlank()) {
+            registerButtonAvailability.value = false
+            registerPasswordEditText.value = PasswordValidator(
+                passwordText = changedText,
+                errorMessage = application.getString(R.string.empty_field)
+            )
+        } else if (!pattern.matcher(changedText).matches()) {
+            registerButtonAvailability.value = false
+            registerPasswordEditText.value = PasswordValidator(
+                passwordText = changedText,
+                errorMessage = application.getString(R.string.password_regex_is_wrong)
+            )
+        } else {
+            registerPasswordEditText.value = PasswordValidator(
+                passwordText = changedText,
+                errorMessage = null
+            )
+            if (registerEmailEditText.value?.emailText.isNullOrBlank() || registerPasswordEditText.value?.passwordText.isNullOrBlank()) {
+                registerButtonAvailability.value = false
+            } else {
+                registerButtonAvailability.value =
+                    registerEmailEditText.value?.errorMessage == null && registerPasswordEditText.value?.errorMessage == null
+            }
+        }
+    }
+
+
+    fun onRegisterEmailTextChanged(changedText: String) {
+        val pattern: Pattern = Patterns.EMAIL_ADDRESS
+        if (changedText.isBlank()) {
+            viewModelScope.launch {
+                withContext(Dispatchers.Main) {
+                    registerButtonAvailability.value = false
+                    registerEmailEditText.value = EmailValidation(
+                        emailText = changedText,
+                        errorMessage = application.getString(R.string.empty_field)
+                    )
+                }
+            }
+        } else if (!pattern.matcher(changedText).matches()) {
+            viewModelScope.launch {
+                withContext(Dispatchers.Main) {
+                    registerButtonAvailability.value = false
+                    registerEmailEditText.value = EmailValidation(
+                        emailText = changedText,
+                        errorMessage = application.getString(R.string.format_error)
+                    )
+                }
+            }
+        } else {
+            viewModelScope.launch {
+                withContext(Dispatchers.Main) {
+                    registerEmailEditText.value = EmailValidation(
+                        emailText = changedText,
+                        errorMessage = null
+                    )
+                    if (registerEmailEditText.value?.emailText.isNullOrBlank() || registerPasswordEditText.value?.passwordText.isNullOrBlank()) {
+                        registerButtonAvailability.value = false
+                    } else {
+                        registerButtonAvailability.value =
+                            registerEmailEditText.value?.errorMessage == null && registerPasswordEditText.value?.errorMessage == null
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun onSignUpClicked(email: String, password: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                authRepository.signUp(email, password).addOnCompleteListener { isCompleted ->
+                    successfullyRegistered.value = isCompleted.isSuccessful
                 }
             }
         }

@@ -15,12 +15,7 @@ abstract class EditTextValidator(
     }
 
     override fun afterTextChanged(p0: Editable?) {
-        editText?.let { validate(it, it.text.toString()) }
-
         editText?.text?.toString()?.let { validatedText(it) }
     }
-
-    abstract fun validate(editText: TextInputEditText, text: String)
-
     abstract fun validatedText(text: String)
 }

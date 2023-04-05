@@ -60,16 +60,13 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/name"
                     android:paddingHorizontal="30dp"
-                    android:paddingVertical="10dp"
-                    app:boxCornerRadiusBottomEnd="10dp"
-                    app:boxCornerRadiusBottomStart="10dp"
-                    app:boxCornerRadiusTopEnd="10dp"
-                    app:boxCornerRadiusTopStart="10dp">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:singleLine="true"  />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,15 +77,13 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
                     android:paddingHorizontal="30dp"
-                    app:boxCornerRadiusBottomEnd="10dp"
-                    app:boxCornerRadiusBottomStart="10dp"
-                    app:boxCornerRadiusTopEnd="10dp"
-                    app:boxCornerRadiusTopStart="10dp">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:singleLine="true"  />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,16 +94,15 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
                     android:paddingHorizontal="30dp"
-                    android:paddingVertical="10dp"
-                    app:boxCornerRadiusBottomEnd="10dp"
-                    app:boxCornerRadiusBottomStart="10dp"
-                    app:boxCornerRadiusTopEnd="10dp"
-                    app:boxCornerRadiusTopStart="10dp">
+                    app:errorEnabled="true"
+                    app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1" />
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"  />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,11 +115,8 @@
                 android:layout_marginVertical="20dp"
                 android:layout_marginHorizontal="30dp"
                 android:text="@string/sign_up"
-                app:cornerRadius="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.716"
-                tools:layout_editor_absoluteX="30dp" />
+                android:enabled="false"
+                app:cornerRadius="50dp"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
